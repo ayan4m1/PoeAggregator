@@ -30,6 +30,25 @@ influenceMods['of the Conquest'] = 'warlord-mod';
 influenceMods['Elevated Warlord\'s'] = 'warlord-mod';
 influenceMods['of the Elevated Conquest'] = 'warlord-mod';
 
+const createIcon = (name, title) => {
+	const el = document.createElement('span');
+
+	el.classList.add('material-symbols-outlined');
+	el.title = title;
+	el.appendChild(document.createTextNode(name));
+
+	return el;
+};
+
+const createIconLabel = (icon, label) => {
+	const el = document.createElement('span');
+
+	el.appendChild(icon);
+	el.appendChild(document.createTextNode(` ${label}`));
+
+	return el;
+};
+
 function dView(result, searchInfo)
 {
 	if(!result) return;
@@ -81,36 +100,16 @@ function dView(result, searchInfo)
 		}
 	}
 
-	const copyIcon = document.createElement('span');
-	copyIcon.classList.add('material-symbols-outlined');
-	copyIcon.title = 'Copy';
-	copyIcon.appendChild(document.createTextNode('content_copy'));
-	const whisperIcon = document.createElement('span');
-	whisperIcon.classList.add('material-symbols-outlined');
-	whisperIcon.title = 'Whisper';
-	whisperIcon.appendChild(document.createTextNode('send'));
-	const whisperDismissIcon = document.createElement('span');
-	whisperDismissIcon.classList.add('material-symbols-outlined');
-	whisperDismissIcon.title = 'Whisper and Dismiss';
-	whisperDismissIcon.appendChild(document.createTextNode('send_and_archive'));
-	const refreshIcon = document.createElement('span');
-	refreshIcon.classList.add('material-symbols-outlined');
-	refreshIcon.title = 'Refresh';
-	refreshIcon.appendChild(document.createTextNode('refresh'));
-	const dismissIcon = document.createElement('span');
-	dismissIcon.classList.add('material-symbols-outlined');
-	dismissIcon.title = 'Dismiss';
-	dismissIcon.appendChild(document.createTextNode('close'));
+	const whisperIcon = createIcon('send', 'Whisper');
+	const whisperDismissIcon = createIcon('send_and_archive', 'Whisper and Dismiss');
+	const refreshIcon = createIcon('refresh', 'Refresh');
+	const dismissIcon = createIcon('close', 'Dismiss');
+	const copyItemIcon = createIcon('content_copy', 'Copy Item');
+  const copyItemLabel = createIconLabel(copyItemIcon, 'Item');
+	const copyWhisperIcon = createIcon('content_copy', 'Copy Whisper');
+	const copyWhisperLabel = createIconLabel(copyWhisperIcon, 'Whisper');
 
-	const secondCopyIcon = document.createElement("span");
-  secondCopyIcon.classList.add("material-symbols-outlined");
-  secondCopyIcon.title = "Copy";
-  secondCopyIcon.appendChild(document.createTextNode("content_copy"));
-  const copyLabel = document.createElement("span");
-  copyLabel.appendChild(secondCopyIcon);
-	copyLabel.appendChild(document.createTextNode(' Item'));
-
-	overrides['copy-item-button'] = buildCopyButton(copyLabel, Buffer.from(result.item.extended.text, 'base64').toString());
+	overrides['copy-item-button'] = buildCopyButton(copyItemLabel, Buffer.from(result.item.extended.text, 'base64').toString());
 	overrides['watch-item-button'] = buildWatchButton(result.id,searchInfo);
 	overrides['listing.price.currency.img'] = '';
 	overrides['listing.price.chaos.equiv'] = '';
@@ -256,7 +255,7 @@ function dView(result, searchInfo)
 		overrides['profile-info'] = buildCharAndAccountInfo(result.listing.account.name, result.listing.account.lastCharacterName);
 	}
 
-	overrides['whisper-button'] = buildCopyButton(copyIcon, result.listing.whisper);
+	overrides['whisper-button'] = buildCopyButton(copyWhisperLabel, result.listing.whisper);
 	overrides['whisper-to-poe-button'] = buildCopyButton(whisperIcon, result.listing.whisper, true);
 	overrides['whisper-dismiss-button'] = buildCopyButton(whisperDismissIcon, result.listing.whisper, true, true);
 	overrides['item.corrupted'] = '';
